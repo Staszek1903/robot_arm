@@ -1,0 +1,673 @@
+
+./bin/out:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000210  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000001c  00800060  00000210  00000284  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .stab         00000e94  00000000  00000000  000002a0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  3 .stabstr      00000cd0  00000000  00000000  00001134  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .comment      00000011  00000000  00000000  00001e04  2**0
+                  CONTENTS, READONLY
+  5 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00001e18  2**2
+                  CONTENTS, READONLY
+  6 .debug_info   0000048c  00000000  00000000  00001e54  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000044e  00000000  00000000  000022e0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   0000001d  00000000  00000000  0000272e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000017a  00000000  00000000  0000274b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	24 c0       	rjmp	.+72     	; 0x4c <__bad_interrupt>
+   4:	23 c0       	rjmp	.+70     	; 0x4c <__bad_interrupt>
+   6:	22 c0       	rjmp	.+68     	; 0x4c <__bad_interrupt>
+   8:	21 c0       	rjmp	.+66     	; 0x4c <__bad_interrupt>
+   a:	20 c0       	rjmp	.+64     	; 0x4c <__bad_interrupt>
+   c:	1f c0       	rjmp	.+62     	; 0x4c <__bad_interrupt>
+   e:	1e c0       	rjmp	.+60     	; 0x4c <__bad_interrupt>
+  10:	1d c0       	rjmp	.+58     	; 0x4c <__bad_interrupt>
+  12:	1c c0       	rjmp	.+56     	; 0x4c <__bad_interrupt>
+  14:	1b c0       	rjmp	.+54     	; 0x4c <__bad_interrupt>
+  16:	1a c0       	rjmp	.+52     	; 0x4c <__bad_interrupt>
+  18:	19 c0       	rjmp	.+50     	; 0x4c <__bad_interrupt>
+  1a:	18 c0       	rjmp	.+48     	; 0x4c <__bad_interrupt>
+  1c:	17 c0       	rjmp	.+46     	; 0x4c <__bad_interrupt>
+  1e:	16 c0       	rjmp	.+44     	; 0x4c <__bad_interrupt>
+  20:	15 c0       	rjmp	.+42     	; 0x4c <__bad_interrupt>
+  22:	14 c0       	rjmp	.+40     	; 0x4c <__bad_interrupt>
+  24:	13 c0       	rjmp	.+38     	; 0x4c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e0 e1       	ldi	r30, 0x10	; 16
+  3a:	f2 e0       	ldi	r31, 0x02	; 2
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	ac 37       	cpi	r26, 0x7C	; 124
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+  48:	d0 d0       	rcall	.+416    	; 0x1ea <main>
+  4a:	e0 c0       	rjmp	.+448    	; 0x20c <_exit>
+
+0000004c <__bad_interrupt>:
+  4c:	d9 cf       	rjmp	.-78     	; 0x0 <__vectors>
+
+0000004e <kp_init>:
+	PORTB |= 0xf0;
+}*/
+
+.global kp_init
+kp_init:
+	in r24, ddr_C
+  4e:	84 b3       	in	r24, 0x14	; 20
+	ori r24, 0xf
+  50:	8f 60       	ori	r24, 0x0F	; 15
+	out ddr_C, r24
+  52:	84 bb       	out	0x14, r24	; 20
+
+	in r24, port_C
+  54:	85 b3       	in	r24, 0x15	; 21
+	ori r24, 0xf
+  56:	8f 60       	ori	r24, 0x0F	; 15
+	out port_C, r24
+  58:	85 bb       	out	0x15, r24	; 21
+
+	in r24, ddr_B
+  5a:	87 b3       	in	r24, 0x17	; 23
+	andi r24, 0xf
+  5c:	8f 70       	andi	r24, 0x0F	; 15
+	out ddr_B, r24
+  5e:	87 bb       	out	0x17, r24	; 23
+
+	in r24, port_B
+  60:	88 b3       	in	r24, 0x18	; 24
+	ori r24, 0xf0
+  62:	80 6f       	ori	r24, 0xF0	; 240
+	out port_B, r24
+  64:	88 bb       	out	0x18, r24	; 24
+
+	ret
+  66:	08 95       	ret
+
+00000068 <kp_tab>:
+  68:	20 31       	cpi	r18, 0x10	; 16
+  6a:	32 33       	cpi	r19, 0x32	; 50
+  6c:	41 34       	cpi	r20, 0x41	; 65
+  6e:	35 36       	cpi	r19, 0x65	; 101
+  70:	42 37       	cpi	r20, 0x72	; 114
+  72:	38 39       	cpi	r19, 0x98	; 152
+  74:	43 2a       	or	r4, r19
+  76:	30 23       	and	r19, r16
+  78:	44 00       	.word	0x0044	; ????
+
+0000007a <kp_getchar>:
+
+kp_tab:
+.asciz " 123A456B789C*0#D"
+.global kp_getchar
+kp_getchar:
+	ldi zh, hi8(kp_tab)
+  7a:	f0 e0       	ldi	r31, 0x00	; 0
+	ldi zl, lo8(kp_tab)
+  7c:	e8 e6       	ldi	r30, 0x68	; 104
+	add zl, r24
+  7e:	e8 0f       	add	r30, r24
+	adc zh, r1
+  80:	f1 1d       	adc	r31, r1
+
+	lpm r24,z
+  82:	84 91       	lpm	r24, Z
+	ret
+  84:	08 95       	ret
+
+00000086 <kp_getkey>:
+
+
+.global kp_getkey
+kp_getkey:
+	clr r23		// result = 0
+  86:	77 27       	eor	r23, r23
+	ldi r25, 1	// i=1
+  88:	91 e0       	ldi	r25, 0x01	; 1
+
+0000008a <kp_gc_loop>:
+	kp_gc_loop:
+		in r24, port_C  //temp = port_C
+  8a:	85 b3       	in	r24, 0x15	; 21
+		ori r24, 0xf	//temp &= 0xf
+  8c:	8f 60       	ori	r24, 0x0F	; 15
+		eor r24, r25	//temp ^=i
+  8e:	89 27       	eor	r24, r25
+		out port_C, r24 //port_C = temp
+  90:	85 bb       	out	0x15, r24	; 21
+
+		nop
+  92:	00 00       	nop
+		nop
+  94:	00 00       	nop
+		nop
+  96:	00 00       	nop
+
+		in r24, pin_B	//pin = pin_B
+  98:	86 b3       	in	r24, 0x16	; 22
+		com r24			//pin = ~pin
+  9a:	80 95       	com	r24
+		swap r24		//swap
+  9c:	82 95       	swap	r24
+		andi r24,0xf	//pin &= 0xf
+  9e:	8f 70       	andi	r24, 0x0F	; 15
+		brne kp_gc_ret  // if(pin != 0) goto kp_gc_ret
+  a0:	21 f4       	brne	.+8      	; 0xaa <kp_gc_ret>
+
+		inc r23			// icrement row num
+  a2:	73 95       	inc	r23
+		lsl r25			//i<<1
+  a4:	99 0f       	add	r25, r25
+		andi r25, 0xf	//i &= 0xf
+  a6:	9f 70       	andi	r25, 0x0F	; 15
+		brne kp_gc_loop // if(i != 0) goto kp_gc_loop
+  a8:	81 f7       	brne	.-32     	; 0x8a <kp_gc_loop>
+
+000000aa <kp_gc_ret>:
+
+kp_gc_ret:
+
+	tst r24
+  aa:	88 23       	and	r24, r24
+	breq kp_gc_ret2
+  ac:	79 f0       	breq	.+30     	; 0xcc <kp_gc_ret2>
+
+	push r0			//save r0 on stack
+  ae:	0f 92       	push	r0
+	ldi r25, 4		//i = 4
+  b0:	94 e0       	ldi	r25, 0x04	; 4
+	mul r23, r25   
+  b2:	79 9f       	mul	r23, r25
+	mov r23, r0		// result = i*4
+  b4:	70 2d       	mov	r23, r0
+	pop r0
+  b6:	0f 90       	pop	r0
+	clr r1
+  b8:	11 24       	eor	r1, r1
+
+	ldi r25, 1		//i=1	
+  ba:	91 e0       	ldi	r25, 0x01	; 1
+
+000000bc <kp_gc_num>:
+	kp_gc_num:
+		inc r23				//result++
+  bc:	73 95       	inc	r23
+		mov r26,r24 
+  be:	a8 2f       	mov	r26, r24
+		and r26,r25 
+  c0:	a9 23       	and	r26, r25
+		brne kp_gc_ret2		//if(pin & i != 0) goto ret2
+  c2:	21 f4       	brne	.+8      	; 0xcc <kp_gc_ret2>
+		lsl r25				//i<<1
+  c4:	99 0f       	add	r25, r25
+		andi r25,0xf		//i &= 0xf
+  c6:	9f 70       	andi	r25, 0x0F	; 15
+		breq kp_gc_ret2		//if(i==0) goto ret2
+  c8:	09 f0       	breq	.+2      	; 0xcc <kp_gc_ret2>
+		rjmp kp_gc_num		//goto num
+  ca:	f8 cf       	rjmp	.-16     	; 0xbc <kp_gc_num>
+
+000000cc <kp_gc_ret2>:
+
+kp_gc_ret2:
+
+	in r26, port_C
+  cc:	a5 b3       	in	r26, 0x15	; 21
+	ori r26, 0xf
+  ce:	af 60       	ori	r26, 0x0F	; 15
+	out port_C, r26
+  d0:	a5 bb       	out	0x15, r26	; 21
+
+	cpse r24, r1
+  d2:	81 11       	cpse	r24, r1
+	mov r24, r23
+  d4:	87 2f       	mov	r24, r23
+
+	ret
+  d6:	08 95       	ret
+
+000000d8 <LCD_delay>:
+ LCD_E = 0
+ LCD_RW = 1
+ LCD_RS = 2
+
+ LCD_delay:
+	clr r24
+  d8:	88 27       	eor	r24, r24
+	clr r25
+  da:	99 27       	eor	r25, r25
+
+000000dc <LCD_delay_loop>:
+	LCD_delay_loop:
+	inc r24
+  dc:	83 95       	inc	r24
+	brne LCD_delay_loop
+  de:	f1 f7       	brne	.-4      	; 0xdc <LCD_delay_loop>
+	inc r25
+  e0:	93 95       	inc	r25
+	brne LCD_delay_loop
+  e2:	e1 f7       	brne	.-8      	; 0xdc <LCD_delay_loop>
+	ret
+  e4:	08 95       	ret
+
+000000e6 <LCD_wait>:
+
+LCD_wait:
+
+	rcall LCD_getaddr
+  e6:	46 d0       	rcall	.+140    	; 0x174 <LCD_getaddr>
+	andi r24, 0x80
+  e8:	80 78       	andi	r24, 0x80	; 128
+	brne LCD_wait
+  ea:	e9 f7       	brne	.-6      	; 0xe6 <LCD_wait>
+
+	ret
+  ec:	08 95       	ret
+
+000000ee <LCD_init>:
+
+.global LCD_init
+LCD_init:
+	in r24, ddr_B
+  ee:	87 b3       	in	r24, 0x17	; 23
+	sbr r24, 0x0f
+  f0:	8f 60       	ori	r24, 0x0F	; 15
+	out ddr_B,r24	;ustawiam magistrale jako wyjscie
+  f2:	87 bb       	out	0x17, r24	; 23
+
+	in r24, ddr_D
+  f4:	81 b3       	in	r24, 0x11	; 17
+	sbr r24, 0b11100000
+  f6:	80 6e       	ori	r24, 0xE0	; 224
+	out ddr_D,r24	; ustwawiam sterowanie jako wyjscie
+  f8:	81 bb       	out	0x11, r24	; 17
+
+	in r24, port_B
+  fa:	88 b3       	in	r24, 0x18	; 24
+	cbr r24, 0x0f
+  fc:	80 7f       	andi	r24, 0xF0	; 240
+	out port_B,r24	;czyszcze magistrale
+  fe:	88 bb       	out	0x18, r24	; 24
+
+	in r24, port_D
+ 100:	82 b3       	in	r24, 0x12	; 18
+	cbr r24, 0b11100000
+ 102:	8f 71       	andi	r24, 0x1F	; 31
+	out port_D,r24  ;czyszcze sterowanie
+ 104:	82 bb       	out	0x12, r24	; 18
+
+	rcall LCD_delay
+ 106:	e8 df       	rcall	.-48     	; 0xd8 <LCD_delay>
+	
+	in r24, port_B
+ 108:	88 b3       	in	r24, 0x18	; 24
+	andi r24, 0xf0
+ 10a:	80 7f       	andi	r24, 0xF0	; 240
+	ori r24, 0x2
+ 10c:	82 60       	ori	r24, 0x02	; 2
+	out port_B, r24
+ 10e:	88 bb       	out	0x18, r24	; 24
+	sbi port_D, LCD_E
+ 110:	90 9a       	sbi	0x12, 0	; 18
+	nop
+ 112:	00 00       	nop
+	nop
+ 114:	00 00       	nop
+	nop
+ 116:	00 00       	nop
+	cbi port_D,LCD_E
+ 118:	90 98       	cbi	0x12, 0	; 18
+	
+	rcall LCD_wait
+ 11a:	e5 df       	rcall	.-54     	; 0xe6 <LCD_wait>
+	ldi r24, 0b0101000
+ 11c:	88 e2       	ldi	r24, 0x28	; 40
+	rcall LCD_command
+ 11e:	04 d0       	rcall	.+8      	; 0x128 <LCD_command>
+
+	rcall LCD_wait
+ 120:	e2 df       	rcall	.-60     	; 0xe6 <LCD_wait>
+	ldi r24, 0b01100
+ 122:	8c e0       	ldi	r24, 0x0C	; 12
+	rcall LCD_command
+ 124:	01 d0       	rcall	.+2      	; 0x128 <LCD_command>
+	ret
+ 126:	08 95       	ret
+
+00000128 <LCD_command>:
+
+
+.global LCD_command
+LCD_command:
+	push r24
+ 128:	8f 93       	push	r24
+	rcall LCD_wait
+ 12a:	dd df       	rcall	.-70     	; 0xe6 <LCD_wait>
+	pop r24
+ 12c:	8f 91       	pop	r24
+
+	in r25, ddr_B
+ 12e:	97 b3       	in	r25, 0x17	; 23
+	sbr r25, 0x0f
+ 130:	9f 60       	ori	r25, 0x0F	; 15
+	out ddr_B, r25
+ 132:	97 bb       	out	0x17, r25	; 23
+
+	cbi port_D, LCD_RW
+ 134:	91 98       	cbi	0x12, 1	; 18
+	cbi port_D, LCD_RS
+ 136:	92 98       	cbi	0x12, 2	; 18
+	rjmp LCD_send
+ 138:	08 c0       	rjmp	.+16     	; 0x14a <LCD_send>
+
+0000013a <LCD_data>:
+
+.global LCD_data
+LCD_data:
+	push r24
+ 13a:	8f 93       	push	r24
+	rcall LCD_wait
+ 13c:	d4 df       	rcall	.-88     	; 0xe6 <LCD_wait>
+	pop r24
+ 13e:	8f 91       	pop	r24
+
+	in r25, ddr_B
+ 140:	97 b3       	in	r25, 0x17	; 23
+	sbr r25, 0x0f
+ 142:	9f 60       	ori	r25, 0x0F	; 15
+	out ddr_B, r25
+ 144:	97 bb       	out	0x17, r25	; 23
+
+	cbi port_D, LCD_RW
+ 146:	91 98       	cbi	0x12, 1	; 18
+	sbi port_D, LCD_RS
+ 148:	92 9a       	sbi	0x12, 2	; 18
+
+0000014a <LCD_send>:
+
+LCD_send:
+	push r24
+ 14a:	8f 93       	push	r24
+	swap r24
+ 14c:	82 95       	swap	r24
+	cbr r24, 0xf0
+ 14e:	8f 70       	andi	r24, 0x0F	; 15
+
+	in r25, port_B
+ 150:	98 b3       	in	r25, 0x18	; 24
+	cbr r25, 0x0f
+ 152:	90 7f       	andi	r25, 0xF0	; 240
+	or r24,r25
+ 154:	89 2b       	or	r24, r25
+	out port_B, r24
+ 156:	88 bb       	out	0x18, r24	; 24
+	sbi port_D, LCD_E
+ 158:	90 9a       	sbi	0x12, 0	; 18
+	nop
+ 15a:	00 00       	nop
+	nop
+ 15c:	00 00       	nop
+	nop
+ 15e:	00 00       	nop
+	cbi port_D,LCD_E
+ 160:	90 98       	cbi	0x12, 0	; 18
+
+	pop r24
+ 162:	8f 91       	pop	r24
+	or r24,r25
+ 164:	89 2b       	or	r24, r25
+	out port_B, r24
+ 166:	88 bb       	out	0x18, r24	; 24
+	sbi port_D,LCD_E
+ 168:	90 9a       	sbi	0x12, 0	; 18
+	nop
+ 16a:	00 00       	nop
+	nop
+ 16c:	00 00       	nop
+	nop
+ 16e:	00 00       	nop
+	cbi port_D,LCD_E
+ 170:	90 98       	cbi	0x12, 0	; 18
+
+	ret
+ 172:	08 95       	ret
+
+00000174 <LCD_getaddr>:
+
+.global LCD_getaddr
+LCD_getaddr:
+	in r24, ddr_B
+ 174:	87 b3       	in	r24, 0x17	; 23
+	cbr r24, 0x0f
+ 176:	80 7f       	andi	r24, 0xF0	; 240
+	out ddr_B,r24
+ 178:	87 bb       	out	0x17, r24	; 23
+
+	sbi port_D, LCD_RW
+ 17a:	91 9a       	sbi	0x12, 1	; 18
+	cbi port_D, LCD_RS
+ 17c:	92 98       	cbi	0x12, 2	; 18
+	rjmp LCD_recieve
+ 17e:	05 c0       	rjmp	.+10     	; 0x18a <LCD_recieve>
+
+00000180 <LCD_getchar>:
+
+.global LCD_getchar
+LCD_getchar:
+	in r24, ddr_B
+ 180:	87 b3       	in	r24, 0x17	; 23
+	cbr r24, 0x0f
+ 182:	80 7f       	andi	r24, 0xF0	; 240
+	out ddr_B,r24
+ 184:	87 bb       	out	0x17, r24	; 23
+
+	sbi port_D, LCD_RW
+ 186:	91 9a       	sbi	0x12, 1	; 18
+	sbi port_D, LCD_RS
+ 188:	92 9a       	sbi	0x12, 2	; 18
+
+0000018a <LCD_recieve>:
+	
+LCD_recieve:
+	sbi port_D, LCD_E
+ 18a:	90 9a       	sbi	0x12, 0	; 18
+	nop
+ 18c:	00 00       	nop
+	nop
+ 18e:	00 00       	nop
+	nop
+ 190:	00 00       	nop
+	in r24, pin_B
+ 192:	86 b3       	in	r24, 0x16	; 22
+	cbi port_D,LCD_E
+ 194:	90 98       	cbi	0x12, 0	; 18
+	cbr r24, 0xf0
+ 196:	8f 70       	andi	r24, 0x0F	; 15
+	swap r24
+ 198:	82 95       	swap	r24
+	nop
+ 19a:	00 00       	nop
+	nop
+ 19c:	00 00       	nop
+
+	sbi port_D,LCD_E
+ 19e:	90 9a       	sbi	0x12, 0	; 18
+	nop
+ 1a0:	00 00       	nop
+	nop
+ 1a2:	00 00       	nop
+	in r25, pin_B
+ 1a4:	96 b3       	in	r25, 0x16	; 22
+	cbi port_D,LCD_E
+ 1a6:	90 98       	cbi	0x12, 0	; 18
+	cbr r25, 0xf0
+ 1a8:	9f 70       	andi	r25, 0x0F	; 15
+	or r24, r25
+ 1aa:	89 2b       	or	r24, r25
+	
+	ret
+ 1ac:	08 95       	ret
+
+000001ae <LCD_print>:
+
+
+.global LCD_print
+LCD_print:
+	movw XL, r24
+ 1ae:	dc 01       	movw	r26, r24
+
+000001b0 <LCD_print_loop>:
+	
+	LCD_print_loop:
+		ld r24, x+
+ 1b0:	8d 91       	ld	r24, X+
+		tst r24
+ 1b2:	88 23       	and	r24, r24
+		breq LCD_print_end
+ 1b4:	11 f0       	breq	.+4      	; 0x1ba <LCD_print_end>
+		rcall LCD_data
+ 1b6:	c1 df       	rcall	.-126    	; 0x13a <LCD_data>
+		rjmp LCD_print_loop
+ 1b8:	fb cf       	rjmp	.-10     	; 0x1b0 <LCD_print_loop>
+
+000001ba <LCD_print_end>:
+
+	LCD_print_end:
+	ret
+ 1ba:	08 95       	ret
+
+000001bc <LCD_clear>:
+
+
+.global	LCD_clear
+LCD_clear:
+	ldi r24, 1
+ 1bc:	81 e0       	ldi	r24, 0x01	; 1
+	rcall LCD_command
+ 1be:	b4 df       	rcall	.-152    	; 0x128 <LCD_command>
+	ret
+ 1c0:	08 95       	ret
+
+000001c2 <LCD_setDDaddr>:
+
+.global LCD_setDDaddr
+LCD_setDDaddr:
+	ori r24, 0x80
+ 1c2:	80 68       	ori	r24, 0x80	; 128
+	rcall LCD_command
+ 1c4:	b1 df       	rcall	.-158    	; 0x128 <LCD_command>
+	ret
+ 1c6:	08 95       	ret
+
+000001c8 <LCD_setCGaddr>:
+
+.global LCD_setCGaddr
+LCD_setCGaddr:
+	ori r24, 0x40
+ 1c8:	80 64       	ori	r24, 0x40	; 64
+	rcall LCD_command
+ 1ca:	ae df       	rcall	.-164    	; 0x128 <LCD_command>
+	ret
+ 1cc:	08 95       	ret
+
+000001ce <LCD_EntryMode>:
+
+.global LCD_EntryMode
+LCD_EntryMode:
+	andi r24, 0x02
+ 1ce:	82 70       	andi	r24, 0x02	; 2
+	andi r22, 1
+ 1d0:	61 70       	andi	r22, 0x01	; 1
+	or r24,r22
+ 1d2:	86 2b       	or	r24, r22
+	ori r24, 0x04
+ 1d4:	84 60       	ori	r24, 0x04	; 4
+	rcall LCD_command
+ 1d6:	a8 df       	rcall	.-176    	; 0x128 <LCD_command>
+	ret
+ 1d8:	08 95       	ret
+
+000001da <LCD_DisplayControl>:
+
+.global LCD_DisplayControl
+LCD_DisplayControl:
+	andi r24, 0x04
+ 1da:	84 70       	andi	r24, 0x04	; 4
+	andi r22, 0x02
+ 1dc:	62 70       	andi	r22, 0x02	; 2
+	andi r20, 0x01
+ 1de:	41 70       	andi	r20, 0x01	; 1
+	or r24,r22
+ 1e0:	86 2b       	or	r24, r22
+	or r24,r20
+ 1e2:	84 2b       	or	r24, r20
+	ori r24, 0x08
+ 1e4:	88 60       	ori	r24, 0x08	; 8
+	rcall LCD_command
+ 1e6:	a0 df       	rcall	.-192    	; 0x128 <LCD_command>
+	ret
+ 1e8:	08 95       	ret
+
+000001ea <main>:
+#include <util/delay.h>
+#include "../inc/LCD.h"
+
+int main(void)
+{
+	LCD_init();
+ 1ea:	81 df       	rcall	.-254    	; 0xee <LCD_init>
+	LCD_DisplayControl(-1,-1,-1);
+ 1ec:	4f ef       	ldi	r20, 0xFF	; 255
+ 1ee:	6f ef       	ldi	r22, 0xFF	; 255
+ 1f0:	8f ef       	ldi	r24, 0xFF	; 255
+ 1f2:	f3 df       	rcall	.-26     	; 0x1da <LCD_DisplayControl>
+	LCD_clear();
+ 1f4:	e3 df       	rcall	.-58     	; 0x1bc <LCD_clear>
+	
+	LCD_setDDaddr(0x0);
+ 1f6:	80 e0       	ldi	r24, 0x00	; 0
+ 1f8:	e4 df       	rcall	.-56     	; 0x1c2 <LCD_setDDaddr>
+	LCD_print("siema linia 1");
+ 1fa:	80 e6       	ldi	r24, 0x60	; 96
+ 1fc:	90 e0       	ldi	r25, 0x00	; 0
+ 1fe:	d7 df       	rcall	.-82     	; 0x1ae <LCD_print>
+	LCD_setDDaddr(0x40);
+ 200:	80 e4       	ldi	r24, 0x40	; 64
+ 202:	df df       	rcall	.-66     	; 0x1c2 <LCD_setDDaddr>
+	LCD_print("witam linia 2");	
+ 204:	8e e6       	ldi	r24, 0x6E	; 110
+ 206:	90 e0       	ldi	r25, 0x00	; 0
+ 208:	d2 df       	rcall	.-92     	; 0x1ae <LCD_print>
+ 20a:	ff cf       	rjmp	.-2      	; 0x20a <main+0x20>
+
+0000020c <_exit>:
+ 20c:	f8 94       	cli
+
+0000020e <__stop_program>:
+ 20e:	ff cf       	rjmp	.-2      	; 0x20e <__stop_program>
